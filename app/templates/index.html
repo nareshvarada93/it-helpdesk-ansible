@@ -1,0 +1,90 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="page-heading">
+    <div>
+        <h1>Support Dashboard</h1>
+        <p>Monitor and manage IT support incidents.</p>
+    </div>
+
+    <a class="button" href="{{ url_for('main.new_ticket') }}">
+        + Create Ticket
+    </a>
+</section>
+
+<section class="stats">
+
+    <div class="stat-card">
+        <span>Total Tickets</span>
+        <h2>{{ total }}</h2>
+    </div>
+
+    <div class="stat-card">
+        <span>Open Tickets</span>
+        <h2>{{ open_count }}</h2>
+    </div>
+
+    <div class="stat-card">
+        <span>In Progress</span>
+        <h2>{{ in_progress }}</h2>
+    </div>
+
+    <div class="stat-card">
+        <span>Resolved</span>
+        <h2>{{ resolved }}</h2>
+    </div>
+
+</section>
+
+<section class="panel">
+
+    <h2>Recent Support Incidents</h2>
+
+    {% if tickets %}
+
+    <div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Issue</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for ticket in tickets %}
+            <tr>
+                <td>#{{ ticket.id }}</td>
+                <td>{{ ticket.title }}</td>
+                <td>
+                    <span class="priority {{ ticket.priority|lower }}">
+                        {{ ticket.priority }}
+                    </span>
+                </td>
+                <td>{{ ticket.status }}</td>
+                <td>{{ ticket.created_at }}</td>
+                <td>
+                    <a href="{{ url_for('main.ticket_detail',
+                                        ticket_id=ticket.id) }}">
+                        View
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
+    {% else %}
+        <p>No support tickets available. Create your first ticket.</p>
+    {% endif %}
+
+</section>
+
+{% endblock %}

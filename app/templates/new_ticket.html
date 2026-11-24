@@ -1,0 +1,46 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="panel form-panel">
+
+    <h1>Create Support Ticket</h1>
+    <p>Report an IT issue for investigation.</p>
+
+    <form method="POST">
+
+        <label>Issue Title</label>
+        <input
+            type="text"
+            name="title"
+            placeholder="Example: Linux server is slow"
+            maxlength="150"
+            required
+        >
+
+        <label>Issue Description</label>
+        <textarea
+            name="description"
+            rows="5"
+            placeholder="Describe the problem..."
+            required
+        ></textarea>
+
+        <label>Priority</label>
+        <select name="priority" required>
+            <option value="Low">Low</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="High">High</option>
+            <option value="Critical">Critical</option>
+        </select>
+
+        <button type="submit" class="button">
+            Submit Ticket
+        </button>
+
+    </form>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,43 @@
+---
+- name: IT Help Desk Linux Health Check
+  hosts: helpdesk_servers
+  gather_facts: true
+
+  tasks:
+
+    - name: Check system uptime
+      ansible.builtin.command: uptime
+      register: uptime_result
+      changed_when: false
+
+    - name: Check disk space
+      ansible.builtin.command: df -h /
+      register: disk_result
+      changed_when: false
+
+    - name: Check memory usage
+      ansible.builtin.command: free -h
+      register: memory_result
+      changed_when: false
+
+    - name: Check CPU information
+      ansible.builtin.command: nproc
+      register: cpu_result
+      changed_when: false
+
+    - name: Check Nginx service status
+      ansible.builtin.command: systemctl is-active nginx
+      register: nginx_result
+      changed_when: false
+      failed_when: false
+
+    - name: Display health report
+      ansible.builtin.debug:
+        msg:
+          hostname: "{{ ansible_facts['hostname'] }}"
+          operating_system: "{{ ansible_distribution }}"
+          uptime: "{{ uptime_result.stdout }}"
+          disk_usage: "{{ disk_result.stdout }}"
+          memory_usage: "{{ memory_result.stdout }}"
+          cpu_cores: "{{ cpu_result.stdout }}"
+          nginx_status: "{{ nginx_result.stdout | default('not installed') }}"

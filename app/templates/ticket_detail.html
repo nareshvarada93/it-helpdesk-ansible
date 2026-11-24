@@ -1,0 +1,91 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="panel">
+
+    <h1>Ticket #{{ ticket.id }}</h1>
+
+    <h2>{{ ticket.title }}</h2>
+
+    <p>{{ ticket.description }}</p>
+
+    <p>
+        <strong>Priority:</strong>
+        {{ ticket.priority }}
+    </p>
+
+    <p>
+        <strong>Status:</strong>
+        {{ ticket.status }}
+    </p>
+
+    <hr>
+
+    <h2>Incident Management</h2>
+
+    <form method="POST"
+          action="{{ url_for('main.change_status',
+                             ticket_id=ticket.id) }}">
+
+        <label>Update Ticket Status</label>
+
+        <select name="status">
+            <option value="Open"
+                {% if ticket.status == 'Open' %}selected{% endif %}>
+                Open
+            </option>
+
+            <option value="In Progress"
+                {% if ticket.status == 'In Progress' %}selected{% endif %}>
+                In Progress
+            </option>
+
+            <option value="Resolved"
+                {% if ticket.status == 'Resolved' %}selected{% endif %}>
+                Resolved
+            </option>
+        </select>
+
+        <button class="button">Update Status</button>
+
+    </form>
+
+</section>
+
+<section class="panel">
+
+    <h2>Ansible Automation</h2>
+
+    <p>
+        Execute a Linux health check to collect server diagnostics.
+    </p>
+
+    <form method="POST"
+          action="{{ url_for('main.execute_check',
+                             ticket_id=ticket.id) }}">
+
+        <button class="button automation-button">
+            Run Server Health Check
+        </button>
+
+    </form>
+
+    {% if ticket.diagnostic_report %}
+
+        <h3>Diagnostic Report</h3>
+
+        <pre class="report">{{ ticket.diagnostic_report }}</pre>
+
+    {% else %}
+
+        <p>No diagnostic report available yet.</p>
+
+    {% endif %}
+
+</section>
+
+<a href="{{ url_for('main.index') }}">← Back to Dashboard</a>
+
+{% endblock %}
